@@ -51,6 +51,7 @@ struct CounterCardView: View {
                         .background(.white.opacity(0.2))
                         .clipShape(Circle())
                 }
+                .buttonStyle(.plain)
 
                 Spacer()
 
@@ -70,6 +71,7 @@ struct CounterCardView: View {
                         .background(.white.opacity(0.2))
                         .clipShape(Circle())
                 }
+                .buttonStyle(.plain)
             }
             .padding(.vertical, 4)
 

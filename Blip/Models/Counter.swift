@@ -29,7 +29,7 @@ final class Counter {
         value: Int = 0,
         stepIncrement: Int = 1,
         goal: Int? = nil,
-        colorName: String = "blue",
+        colorName: String = "cobalt",
         resetValue: Int = 0,
         resetFrequency: ResetFrequency = .never,
         sortOrder: Int = 0,

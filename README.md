@@ -6,7 +6,7 @@ A minimal iOS counter app. Add multiple counters as colored cards, tap +/− to 
 
 - Multiple counters displayed as full-width colored cards
 - Animated flip clock digits with configurable digit count (auto, 2, 3, or 4)
-- 12 color presets for cards
+- 12 curated color presets (Tailwind-inspired palette) plus custom color picker
 - Optional goal tracking with completion badge
 - Last updated timestamp on each card
 - Configurable step increment for +/− buttons

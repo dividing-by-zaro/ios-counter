@@ -19,7 +19,7 @@
 
 ### Key Components
 - `FlipClockView` — Animated flip clock digits adapted from elpassion/FlipClock-SwiftUI approach. Takes `value: Int` and `digitCount: Int`, pads with leading zeros.
-- `ColorHelper` — 12 preset color mappings (red, orange, yellow, green, teal, blue, indigo, purple, pink, brown, mint, cyan)
+- `ColorHelper` — 12 ultra-modern Tailwind-inspired color presets (coral, tangerine, amber, emerald, teal, sky, cobalt, indigo, violet, fuchsia, slate, zinc) defined via hex values. Supports custom hex colors (`#RRGGBB`), legacy name mapping for old system colors, `Color(hex:)` initializer, and `.hexString` computed property.
 - `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter
 
 ### Simulator Workflow

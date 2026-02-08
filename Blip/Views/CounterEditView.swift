@@ -12,13 +12,18 @@ struct CounterEditView: View {
     @State private var stepIncrement: Int = 1
     @State private var hasGoal: Bool = false
     @State private var goal: Int = 100
-    @State private var colorName: String = "blue"
+    @State private var colorName: String = "cobalt"
     @State private var digitCount: Int = 1
     @State private var resetValue: Int = 0
     @State private var resetFrequency: ResetFrequency = .never
     @State private var showDeleteConfirmation = false
+    @State private var customColor: Color = Color(hex: "#2563EB")
 
     private var isEditing: Bool { counter != nil }
+
+    private var isCustom: Bool {
+        colorName.hasPrefix("#")
+    }
 
     var body: some View {
         NavigationStack {
@@ -81,6 +86,26 @@ struct CounterEditView: View {
                         }
                     }
                     .padding(.vertical, 4)
+
+                    HStack {
+                        Label {
+                            Text("Custom")
+                        } icon: {
+                            if isCustom {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(customColor)
+                            } else {
+                                Image(systemName: "paintpalette")
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        Spacer()
+                        ColorPicker("", selection: $customColor, supportsOpacity: false)
+                            .labelsHidden()
+                    }
+                    .onChange(of: customColor) { _, newValue in
+                        colorName = newValue.hexString
+                    }
                 }
 
                 Section("Reset") {
@@ -138,6 +163,9 @@ struct CounterEditView: View {
                     digitCount = counter.digitCount
                     resetValue = counter.resetValue
                     resetFrequency = counter.resetFrequency
+                    if counter.colorName.hasPrefix("#") {
+                        customColor = Color(hex: counter.colorName)
+                    }
                 }
             }
         }
