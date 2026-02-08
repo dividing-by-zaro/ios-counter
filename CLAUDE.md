@@ -1,0 +1,31 @@
+## Blip — iOS Counter App
+
+### Build & Run
+- Xcode project generated via `xcodegen` from `project.yml`
+- Regenerate after adding/removing files: `xcodegen generate`
+- Build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project Blip.xcodeproj -scheme Blip -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -quiet build`
+- Bundle ID: `com.izaro.blip`
+- Target: iOS 17+, SwiftUI lifecycle, SwiftData persistence
+
+### Architecture
+- MVVM-light: SwiftData `@Model` + SwiftUI views with `@Query`
+- No navigation stack — flat layout with sheets for editing
+- Counters displayed as colored cards with flip clock digits
+
+### Data Model (`Counter.swift`)
+- `@Model` with: id, title, value, stepIncrement, goal?, colorName, resetValue, resetFrequency, lastResetDate, createdAt, sortOrder, digitCount, lastUpdatedDate
+- `ResetFrequency` enum: never, daily, weekly, monthly
+- Adding/removing model properties requires uninstalling the app (no migration configured)
+
+### Key Components
+- `FlipClockView` — Animated flip clock digits adapted from elpassion/FlipClock-SwiftUI approach. Takes `value: Int` and `digitCount: Int`, pads with leading zeros.
+- `ColorHelper` — 12 preset color mappings (red, orange, yellow, green, teal, blue, indigo, purple, pink, brown, mint, cyan)
+- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter
+
+### Simulator Workflow
+```bash
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+xcrun simctl boot "iPhone 17 Pro"
+xcrun simctl install "iPhone 17 Pro" "$(find ~/Library/Developer/Xcode/DerivedData/Blip-*/Build/Products/Debug-iphonesimulator -name 'Blip.app' -maxdepth 1)"
+xcrun simctl launch "iPhone 17 Pro" com.izaro.blip
+```
