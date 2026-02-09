@@ -1,0 +1,38 @@
+# Xcode generated project (regenerate with `xcodegen generate`)
+Blip.xcodeproj/
+
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
+
+# OS files
+.DS_Store
+*.swp
+*~
