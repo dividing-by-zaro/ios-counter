@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import WidgetKit
 
 struct CounterCardView: View {
     @Bindable var counter: Counter
@@ -43,7 +42,7 @@ struct CounterCardView: View {
                 Button {
                     counter.value -= counter.stepIncrement
                     counter.lastUpdatedDate = Date()
-                    WidgetCenter.shared.reloadAllTimelines()
+                    WidgetReloader.requestReload()
                 } label: {
                     Image(systemName: "minus")
                         .font(.title2)
@@ -64,7 +63,7 @@ struct CounterCardView: View {
                 Button {
                     counter.value += counter.stepIncrement
                     counter.lastUpdatedDate = Date()
-                    WidgetCenter.shared.reloadAllTimelines()
+                    WidgetReloader.requestReload()
                 } label: {
                     Image(systemName: "plus")
                         .font(.title2)
@@ -91,30 +90,42 @@ struct CounterCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
+    private static let todayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "h:mma"
+        f.amSymbol = "am"
+        f.pmSymbol = "pm"
+        return f
+    }()
+
+    private static let weekdayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEEE h:mma"
+        f.amSymbol = "am"
+        f.pmSymbol = "pm"
+        return f
+    }()
+
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEEE, MMMM d"
+        return f
+    }()
+
     private func formattedLastUpdated(_ date: Date) -> String {
         let calendar = Calendar.current
         let now = Date()
 
         if calendar.isDateInToday(date) {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mma"
-            formatter.amSymbol = "am"
-            formatter.pmSymbol = "pm"
-            return formatter.string(from: date)
+            return Self.todayFormatter.string(from: date)
         }
 
         let daysAgo = calendar.dateComponents([.day], from: calendar.startOfDay(for: date), to: calendar.startOfDay(for: now)).day ?? 0
 
         if daysAgo < 7 {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE h:mma"
-            formatter.amSymbol = "am"
-            formatter.pmSymbol = "pm"
-            return formatter.string(from: date)
+            return Self.weekdayFormatter.string(from: date)
         }
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d"
-        return formatter.string(from: date)
+        return Self.dateFormatter.string(from: date)
     }
 }

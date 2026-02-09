@@ -12,7 +12,7 @@
 - No navigation stack — flat layout with sheets for editing
 - Counters displayed as colored cards with flip clock digits
 - App Group (`group.com.izaro.blip`) for shared data access between app and widget extension
-- SwiftData store lives in the App Group container (`Shared/SharedModelContainer.swift`)
+- SwiftData store lives in the App Group container (`Shared/SharedModelContainer.swift`); single cached `ModelContainer` shared across app and widget extension
 
 ### Data Model (`Counter.swift`)
 - `@Model` with: id, title, value, stepIncrement, goal?, colorName, resetValue, resetFrequency, lastResetDate, createdAt, sortOrder, digitCount, lastUpdatedDate
@@ -22,7 +22,8 @@
 ### Key Components
 - `FlipClockView` — Animated flip clock digits adapted from elpassion/FlipClock-SwiftUI approach. Takes `value: Int` and `digitCount: Int`, pads with leading zeros.
 - `ColorHelper` — 12 ultra-modern Tailwind-inspired color presets (coral, tangerine, amber, emerald, teal, sky, cobalt, indigo, violet, fuchsia, slate, zinc) defined via hex values. Supports custom hex colors (`#RRGGBB`), legacy name mapping for old system colors, `Color(hex:)` initializer, and `.hexString` computed property.
-- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter. Includes one-time migration from default store to App Group location.
+- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter. Sets `lastUpdatedDate` to the reset boundary (midnight for daily, start of week/month for weekly/monthly). Includes one-time migration from default store to App Group location.
+- `WidgetReloader` — Debounced wrapper around `WidgetCenter.shared.reloadAllTimelines()` with 0.5s coalescing. All views use `WidgetReloader.requestReload()` instead of calling WidgetKit directly.
 
 ### Widget Extension (`BlipWidget/`)
 - WidgetKit lock screen widgets using `AppIntentConfiguration`
@@ -31,7 +32,7 @@
   - **Blip Counters** (`BlipMultiWidget`) — multi-counter picker, supports `accessoryRectangular` (up to 3 counters)
 - `SelectCounterIntent` / `SelectCountersIntent` — AppIntents for counter selection via `CounterEntityQuery`
 - `BlipWidgetProvider` / `BlipMultiWidgetProvider` — timeline providers with 30-minute refresh
-- Views trigger `WidgetCenter.shared.reloadAllTimelines()` on every counter mutation
+- Views trigger debounced widget reloads via `WidgetReloader.requestReload()`
 - Widget bundle ID: `com.izaro.blip.widget`
 
 ### Simulator Workflow

@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import WidgetKit
 
 @main
 struct BlipApp: App {
@@ -54,14 +53,9 @@ struct BlipApp: App {
         defaults.set(true, forKey: "didMigrateToAppGroup")
     }
 
+    @MainActor
     private func performAutoResets() {
-        let container: ModelContainer
-        do {
-            container = try SharedModelContainer.makeContainer()
-        } catch {
-            return
-        }
-        let context = ModelContext(container)
+        let context = ModelContext(SharedModelContainer.container)
 
         let descriptor = FetchDescriptor<Counter>()
         guard let counters = try? context.fetch(descriptor) else { return }
@@ -96,6 +90,20 @@ struct BlipApp: App {
             if shouldReset {
                 counter.value = counter.resetValue
                 counter.lastResetDate = now
+
+                let resetTime: Date
+                switch counter.resetFrequency {
+                case .daily:
+                    resetTime = calendar.startOfDay(for: now)
+                case .weekly:
+                    resetTime = calendar.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: now).date ?? calendar.startOfDay(for: now)
+                case .monthly:
+                    resetTime = calendar.dateComponents([.calendar, .year, .month], from: now).date ?? calendar.startOfDay(for: now)
+                case .never:
+                    resetTime = now
+                }
+                counter.lastUpdatedDate = resetTime
+
                 didReset = true
             }
         }
@@ -103,7 +111,7 @@ struct BlipApp: App {
         try? context.save()
 
         if didReset {
-            WidgetCenter.shared.reloadAllTimelines()
+            WidgetReloader.requestReload()
         }
     }
 }

@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import WidgetKit
 
 struct CounterEditView: View {
     @Environment(\.modelContext) private var modelContext
@@ -140,7 +139,7 @@ struct CounterEditView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         save()
-                        WidgetCenter.shared.reloadAllTimelines()
+                        WidgetReloader.requestReload()
                         dismiss()
                     }
                     .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
@@ -150,7 +149,7 @@ struct CounterEditView: View {
                 Button("Delete", role: .destructive) {
                     if let counter {
                         modelContext.delete(counter)
-                        WidgetCenter.shared.reloadAllTimelines()
+                        WidgetReloader.requestReload()
                     }
                     dismiss()
                 }

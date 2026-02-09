@@ -10,6 +10,7 @@
 		003D2749986F3310D76960CC /* BlipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D195C0F2B03D78AA9EC7C739 /* BlipApp.swift */; };
 		016749C3455C6430CA7D42F5 /* FlipClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055F3118FBDDF11FFE89E3E /* FlipClockView.swift */; };
 		1A1401130061E76760C7D3E2 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FB911BCB2E924E878E9381 /* Counter.swift */; };
+		2A774485BE3E06D9CDF885EF /* WidgetReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998637411D3FA8DCB715FE1D /* WidgetReloader.swift */; };
 		2D28CFB1B57F79F7E1D87EF2 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F2BD8CA15FFC59896B4B1F /* SharedModelContainer.swift */; };
 		3B1AA97E476D531AF22452ED /* ColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358A265050B8870484584DAB /* ColorHelper.swift */; };
 		3EC34E359A23FDDA1D8B3DD3 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F2BD8CA15FFC59896B4B1F /* SharedModelContainer.swift */; };
@@ -65,10 +66,11 @@
 		5B868F13FBBB5ECB03FE0D22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DB898137DCDFB5579462042 /* BlipWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlipWidget.entitlements; sourceTree = "<group>"; };
 		8A9C04A45BF13241304A24C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		998637411D3FA8DCB715FE1D /* WidgetReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetReloader.swift; sourceTree = "<group>"; };
 		AFE2666DB021E0635FF6830C /* BlipWidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlipWidgetViews.swift; sourceTree = "<group>"; };
 		B91AF60B19E14CA63D6B1454 /* BlipWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlipWidget.swift; sourceTree = "<group>"; };
 		D195C0F2B03D78AA9EC7C739 /* BlipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlipApp.swift; sourceTree = "<group>"; };
-		D2D91AC1B5A59D4A14198976 /* Blip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2D91AC1B5A59D4A14198976 /* Blip.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Blip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D67B3F786EF51A4BDD0502AB /* BlipWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlipWidgetProvider.swift; sourceTree = "<group>"; };
 		D685C4BF6DBA41231B6C7D0A /* CounterCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterCardView.swift; sourceTree = "<group>"; };
 		E3AC71439EB42D378BFA442D /* CounterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterListView.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				358A265050B8870484584DAB /* ColorHelper.swift */,
+				998637411D3FA8DCB715FE1D /* WidgetReloader.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				588B6004F9A2FBEFE3AE5F90 /* CounterListView.swift in Sources */,
 				016749C3455C6430CA7D42F5 /* FlipClockView.swift in Sources */,
 				2D28CFB1B57F79F7E1D87EF2 /* SharedModelContainer.swift in Sources */,
+				2A774485BE3E06D9CDF885EF /* WidgetReloader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +299,6 @@
 				CODE_SIGN_ENTITLEMENTS = Blip/Blip.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 85S8MAN3A4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -397,7 +400,6 @@
 				CODE_SIGN_ENTITLEMENTS = Blip/Blip.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 85S8MAN3A4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

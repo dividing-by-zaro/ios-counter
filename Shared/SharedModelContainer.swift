@@ -16,9 +16,13 @@ enum SharedModelContainer {
         return try! ModelContainer(for: schema, configurations: [config])
     }()
 
-    static func makeContainer() throws -> ModelContainer {
+    private static let _widgetContainer: ModelContainer = {
         let schema = Schema([Counter.self])
         let config = ModelConfiguration("Blip", url: url)
-        return try ModelContainer(for: schema, configurations: [config])
+        return try! ModelContainer(for: schema, configurations: [config])
+    }()
+
+    static func makeContainer() throws -> ModelContainer {
+        _widgetContainer
     }
 }
