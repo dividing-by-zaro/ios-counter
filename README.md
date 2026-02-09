@@ -12,6 +12,8 @@ A minimal iOS counter app. Add multiple counters as colored cards, tap +/− to 
 - Configurable step increment for +/− buttons
 - Auto-reset (daily, weekly, monthly) with configurable reset value
 - Data persistence with SwiftData
+- Lock screen widgets (circular, rectangular, inline) via WidgetKit
+- Multi-counter rectangular widget with goal progress display
 - Dark theme
 
 ### Requirements

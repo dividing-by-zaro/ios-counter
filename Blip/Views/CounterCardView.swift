@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct CounterCardView: View {
     @Bindable var counter: Counter
@@ -42,6 +43,7 @@ struct CounterCardView: View {
                 Button {
                     counter.value -= counter.stepIncrement
                     counter.lastUpdatedDate = Date()
+                    WidgetCenter.shared.reloadAllTimelines()
                 } label: {
                     Image(systemName: "minus")
                         .font(.title2)
@@ -62,6 +64,7 @@ struct CounterCardView: View {
                 Button {
                     counter.value += counter.stepIncrement
                     counter.lastUpdatedDate = Date()
+                    WidgetCenter.shared.reloadAllTimelines()
                 } label: {
                     Image(systemName: "plus")
                         .font(.title2)

@@ -11,6 +11,8 @@
 - MVVM-light: SwiftData `@Model` + SwiftUI views with `@Query`
 - No navigation stack — flat layout with sheets for editing
 - Counters displayed as colored cards with flip clock digits
+- App Group (`group.com.izaro.blip`) for shared data access between app and widget extension
+- SwiftData store lives in the App Group container (`Shared/SharedModelContainer.swift`)
 
 ### Data Model (`Counter.swift`)
 - `@Model` with: id, title, value, stepIncrement, goal?, colorName, resetValue, resetFrequency, lastResetDate, createdAt, sortOrder, digitCount, lastUpdatedDate
@@ -20,7 +22,17 @@
 ### Key Components
 - `FlipClockView` — Animated flip clock digits adapted from elpassion/FlipClock-SwiftUI approach. Takes `value: Int` and `digitCount: Int`, pads with leading zeros.
 - `ColorHelper` — 12 ultra-modern Tailwind-inspired color presets (coral, tangerine, amber, emerald, teal, sky, cobalt, indigo, violet, fuchsia, slate, zinc) defined via hex values. Supports custom hex colors (`#RRGGBB`), legacy name mapping for old system colors, `Color(hex:)` initializer, and `.hexString` computed property.
-- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter
+- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter. Includes one-time migration from default store to App Group location.
+
+### Widget Extension (`BlipWidget/`)
+- WidgetKit lock screen widgets using `AppIntentConfiguration`
+- Two widgets in `BlipWidgetBundle`:
+  - **Blip Counter** (`BlipWidget`) — single counter, supports `accessoryCircular` and `accessoryInline`
+  - **Blip Counters** (`BlipMultiWidget`) — multi-counter picker, supports `accessoryRectangular` (up to 3 counters)
+- `SelectCounterIntent` / `SelectCountersIntent` — AppIntents for counter selection via `CounterEntityQuery`
+- `BlipWidgetProvider` / `BlipMultiWidgetProvider` — timeline providers with 30-minute refresh
+- Views trigger `WidgetCenter.shared.reloadAllTimelines()` on every counter mutation
+- Widget bundle ID: `com.izaro.blip.widget`
 
 ### Simulator Workflow
 ```bash

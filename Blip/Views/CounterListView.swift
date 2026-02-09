@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct CounterListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -66,6 +67,7 @@ struct CounterListView: View {
             Button("Delete", role: .destructive) {
                 if let counterToDelete {
                     modelContext.delete(counterToDelete)
+                    WidgetCenter.shared.reloadAllTimelines()
                 }
                 counterToDelete = nil
             }

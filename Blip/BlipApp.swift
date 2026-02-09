@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 @main
 struct BlipApp: App {
@@ -7,17 +8,56 @@ struct BlipApp: App {
         WindowGroup {
             CounterListView()
         }
-        .modelContainer(for: Counter.self)
+        .modelContainer(SharedModelContainer.container)
     }
 
     init() {
+        migrateToAppGroupIfNeeded()
         performAutoResets()
+    }
+
+    private func migrateToAppGroupIfNeeded() {
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: "didMigrateToAppGroup") else { return }
+
+        let fileManager = FileManager.default
+        let defaultStoreURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            .appending(path: "default.store")
+        let sharedURL = SharedModelContainer.url
+
+        guard fileManager.fileExists(atPath: defaultStoreURL.path()) else {
+            defaults.set(true, forKey: "didMigrateToAppGroup")
+            return
+        }
+        guard !fileManager.fileExists(atPath: sharedURL.path()) else {
+            defaults.set(true, forKey: "didMigrateToAppGroup")
+            return
+        }
+
+        do {
+            let dir = sharedURL.deletingLastPathComponent()
+            if !fileManager.fileExists(atPath: dir.path()) {
+                try fileManager.createDirectory(at: dir, withIntermediateDirectories: true)
+            }
+            // Copy main store and associated files
+            for suffix in ["", "-wal", "-shm"] {
+                let src = URL(fileURLWithPath: defaultStoreURL.path() + suffix)
+                let dst = URL(fileURLWithPath: sharedURL.path() + suffix)
+                if fileManager.fileExists(atPath: src.path) {
+                    try fileManager.copyItem(at: src, to: dst)
+                }
+            }
+        } catch {
+            // Migration failed — first launch will create a fresh store
+        }
+
+        defaults.set(true, forKey: "didMigrateToAppGroup")
     }
 
     private func performAutoResets() {
         let container: ModelContainer
         do {
-            container = try ModelContainer(for: Counter.self)
+            container = try SharedModelContainer.makeContainer()
         } catch {
             return
         }
@@ -28,6 +68,7 @@ struct BlipApp: App {
 
         let calendar = Calendar.current
         let now = Date()
+        var didReset = false
 
         for counter in counters {
             guard counter.resetFrequency != .never else { continue }
@@ -55,9 +96,14 @@ struct BlipApp: App {
             if shouldReset {
                 counter.value = counter.resetValue
                 counter.lastResetDate = now
+                didReset = true
             }
         }
 
         try? context.save()
+
+        if didReset {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 }

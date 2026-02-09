@@ -4,12 +4,20 @@ options:
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16.0"
+schemes:
+  Blip:
+    build:
+      targets:
+        Blip: all
+    run:
+      config: Debug
 targets:
   Blip:
     type: application
     platform: iOS
     sources:
       - Blip
+      - Shared
     settings:
       base:
         SWIFT_VERSION: "5.9"
@@ -22,3 +30,27 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
+        CODE_SIGN_ENTITLEMENTS: Blip/Blip.entitlements
+    dependencies:
+      - target: BlipWidgetExtension
+  BlipWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - BlipWidget
+      - Shared
+      - path: Blip/Models/Counter.swift
+      - path: Blip/Utilities/ColorHelper.swift
+    info:
+      path: BlipWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Blip Widget
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        PRODUCT_BUNDLE_IDENTIFIER: com.izaro.blip.widget
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_ENTITLEMENTS: BlipWidget/BlipWidget.entitlements
