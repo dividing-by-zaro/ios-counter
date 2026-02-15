@@ -22,7 +22,8 @@
 ### Key Components
 - `FlipClockView` — Animated flip clock digits adapted from elpassion/FlipClock-SwiftUI approach. Takes `value: Int` and `digitCount: Int`, pads with leading zeros.
 - `ColorHelper` — 12 ultra-modern Tailwind-inspired color presets (coral, tangerine, amber, emerald, teal, sky, cobalt, indigo, violet, fuchsia, slate, zinc) defined via hex values. Supports custom hex colors (`#RRGGBB`), legacy name mapping for old system colors, `Color(hex:)` initializer, and `.hexString` computed property.
-- `BlipApp` — Auto-reset logic runs on launch, checking reset boundaries per counter. Sets `lastUpdatedDate` to the reset boundary (midnight for daily, start of week/month for weekly/monthly). Includes one-time migration from default store to App Group location.
+- `CounterResetHelper` (`Shared/`) — Shared reset logic used by both app and widget extension. `performResets(in:)` resets all due counters, `shouldReset(_:)` checks a single counter, `nextResetDate(for:)` calculates the next reset boundary (midnight/week/month start).
+- `BlipApp` — Observes `scenePhase` to run auto-resets when the app returns to foreground (not just on cold launch). Includes one-time migration from default store to App Group location.
 - `WidgetReloader` — Debounced wrapper around `WidgetCenter.shared.reloadAllTimelines()` with 0.5s coalescing. All views use `WidgetReloader.requestReload()` instead of calling WidgetKit directly.
 
 ### Widget Extension (`BlipWidget/`)
@@ -31,7 +32,7 @@
   - **Blip Counter** (`BlipWidget`) — single counter, supports `accessoryCircular` and `accessoryInline`
   - **Blip Counters** (`BlipMultiWidget`) — multi-counter picker, supports `accessoryRectangular` (up to 3 counters)
 - `SelectCounterIntent` / `SelectCountersIntent` — AppIntents for counter selection via `CounterEntityQuery`
-- `BlipWidgetProvider` / `BlipMultiWidgetProvider` — timeline providers with 30-minute refresh
+- `BlipWidgetProvider` / `BlipMultiWidgetProvider` — timeline providers that apply pending resets and schedule future entries at reset boundaries (midnight for daily) so widgets update without opening the app
 - Views trigger debounced widget reloads via `WidgetReloader.requestReload()`
 - Widget bundle ID: `com.izaro.blip.widget`
 

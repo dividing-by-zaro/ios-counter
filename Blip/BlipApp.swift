@@ -3,16 +3,25 @@ import SwiftData
 
 @main
 struct BlipApp: App {
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
             CounterListView()
         }
         .modelContainer(SharedModelContainer.container)
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                if CounterResetHelper.performResets(in: SharedModelContainer.container) {
+                    WidgetReloader.requestReload()
+                }
+            }
+        }
     }
 
     init() {
         migrateToAppGroupIfNeeded()
-        performAutoResets()
+        CounterResetHelper.performResets(in: SharedModelContainer.container)
     }
 
     private func migrateToAppGroupIfNeeded() {
@@ -51,67 +60,5 @@ struct BlipApp: App {
         }
 
         defaults.set(true, forKey: "didMigrateToAppGroup")
-    }
-
-    @MainActor
-    private func performAutoResets() {
-        let context = ModelContext(SharedModelContainer.container)
-
-        let descriptor = FetchDescriptor<Counter>()
-        guard let counters = try? context.fetch(descriptor) else { return }
-
-        let calendar = Calendar.current
-        let now = Date()
-        var didReset = false
-
-        for counter in counters {
-            guard counter.resetFrequency != .never else { continue }
-
-            let shouldReset: Bool
-            switch counter.resetFrequency {
-            case .daily:
-                shouldReset = !calendar.isDate(counter.lastResetDate, inSameDayAs: now)
-            case .weekly:
-                let lastWeek = calendar.component(.weekOfYear, from: counter.lastResetDate)
-                let lastYear = calendar.component(.yearForWeekOfYear, from: counter.lastResetDate)
-                let currentWeek = calendar.component(.weekOfYear, from: now)
-                let currentYear = calendar.component(.yearForWeekOfYear, from: now)
-                shouldReset = lastWeek != currentWeek || lastYear != currentYear
-            case .monthly:
-                let lastMonth = calendar.component(.month, from: counter.lastResetDate)
-                let lastYear = calendar.component(.year, from: counter.lastResetDate)
-                let currentMonth = calendar.component(.month, from: now)
-                let currentYear = calendar.component(.year, from: now)
-                shouldReset = lastMonth != currentMonth || lastYear != currentYear
-            case .never:
-                shouldReset = false
-            }
-
-            if shouldReset {
-                counter.value = counter.resetValue
-                counter.lastResetDate = now
-
-                let resetTime: Date
-                switch counter.resetFrequency {
-                case .daily:
-                    resetTime = calendar.startOfDay(for: now)
-                case .weekly:
-                    resetTime = calendar.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: now).date ?? calendar.startOfDay(for: now)
-                case .monthly:
-                    resetTime = calendar.dateComponents([.calendar, .year, .month], from: now).date ?? calendar.startOfDay(for: now)
-                case .never:
-                    resetTime = now
-                }
-                counter.lastUpdatedDate = resetTime
-
-                didReset = true
-            }
-        }
-
-        try? context.save()
-
-        if didReset {
-            WidgetReloader.requestReload()
-        }
     }
 }

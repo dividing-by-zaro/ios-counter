@@ -10,7 +10,7 @@ A minimal iOS counter app. Add multiple counters as colored cards, tap +/− to 
 - Optional goal tracking with completion badge
 - Last updated timestamp on each card
 - Configurable step increment for +/− buttons
-- Auto-reset (daily, weekly, monthly) with configurable reset value; timestamp shows reset boundary (e.g. 12:00am for daily)
+- Auto-reset (daily, weekly, monthly) with configurable reset value; resets apply on foreground resume (no force-quit needed) and lock screen widgets update at midnight
 - Data persistence with SwiftData
 - Lock screen widgets (circular, rectangular, inline) via WidgetKit
 - Multi-counter rectangular widget with goal progress display
