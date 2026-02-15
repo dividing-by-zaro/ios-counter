@@ -36,6 +36,10 @@
 - Views trigger debounced widget reloads via `WidgetReloader.requestReload()`
 - Widget bundle ID: `com.izaro.blip.widget`
 
+### Screenshots
+- Raw screenshots in `screenshots/blip-*.png`, framed versions in `screenshots/blip-*-framed.png`
+- `scripts/frame_screenshots.py` — Pillow script that composites iPhone device frames (bezel, side buttons) onto raw screenshots; outputs `*-framed.png` without overwriting originals
+
 ### Simulator Workflow
 ```bash
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
