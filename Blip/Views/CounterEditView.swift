@@ -6,6 +6,7 @@ struct CounterEditView: View {
     @Environment(\.dismiss) private var dismiss
 
     var counter: Counter?
+    var nextSortOrder: Int = 0
 
     @State private var title: String = ""
     @State private var value: Int = 0
@@ -192,6 +193,7 @@ struct CounterEditView: View {
                 colorName: colorName,
                 resetValue: resetValue,
                 resetFrequency: resetFrequency,
+                sortOrder: nextSortOrder,
                 digitCount: digitCount
             )
             modelContext.insert(newCounter)

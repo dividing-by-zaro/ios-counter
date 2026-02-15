@@ -57,7 +57,7 @@ struct CounterListView: View {
             .padding(.top, 8)
         }
         .sheet(isPresented: $showAddSheet) {
-            CounterEditView()
+            CounterEditView(nextSortOrder: counters.count)
         }
         .sheet(item: $counterToEdit) { counter in
             CounterEditView(counter: counter)
